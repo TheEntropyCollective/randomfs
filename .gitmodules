@@ -1,0 +1,12 @@
+[submodule "randomfs-core"]
+	path = randomfs-core
+	url = https://github.com/TheEntropyCollective/randomfs-core.git
+[submodule "randomfs-cli"]
+	path = randomfs-cli
+	url = https://github.com/TheEntropyCollective/randomfs-cli.git
+[submodule "randomfs-http"]
+	path = randomfs-http
+	url = https://github.com/TheEntropyCollective/randomfs-http.git
+[submodule "randomfs-web"]
+	path = randomfs-web
+	url = https://github.com/TheEntropyCollective/randomfs-web.git
