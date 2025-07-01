@@ -4,7 +4,6 @@
 *.dll
 *.so
 *.dylib
-randomfs
 
 # Test binary, built with `go test -c`
 *.test
@@ -35,7 +34,6 @@ ehthumbs.db
 Thumbs.db
 
 # Project specific
-/build/
 /data/
 /release/
 /certs/
@@ -48,4 +46,8 @@ coverage.html
 
 # Temporary files
 tmp/
-temp/ 
+temp/
+
+# Component-specific binaries (each component has its own .gitignore)
+randomfs-cli/randomfs-cli
+randomfs-http/randomfs-http 

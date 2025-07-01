@@ -3,7 +3,6 @@ package randomfs
 import (
 	"bytes"
 	"crypto/rand"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,8 +16,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/gorilla/mux"
 )
 
 const (
@@ -41,7 +38,6 @@ const (
 // RandomFS represents the main filesystem instance
 type RandomFS struct {
 	ipfsAPI    string
-	httpPort   int
 	dataDir    string
 	blockCache *BlockCache
 	mutex      sync.RWMutex
@@ -90,7 +86,7 @@ type RandomURL struct {
 }
 
 // NewRandomFS creates a new RandomFS instance
-func NewRandomFS(ipfsAPI string, httpPort int, dataDir string, cacheSize int64) (*RandomFS, error) {
+func NewRandomFS(ipfsAPI string, dataDir string, cacheSize int64) (*RandomFS, error) {
 	if ipfsAPI == "" {
 		ipfsAPI = DefaultIPFSEndpoint
 	}
@@ -100,9 +96,8 @@ func NewRandomFS(ipfsAPI string, httpPort int, dataDir string, cacheSize int64) 
 	}
 
 	rfs := &RandomFS{
-		ipfsAPI:  ipfsAPI,
-		httpPort: httpPort,
-		dataDir:  dataDir,
+		ipfsAPI: ipfsAPI,
+		dataDir: dataDir,
 		blockCache: &BlockCache{
 			blocks:  make(map[string][]byte),
 			maxSize: cacheSize,
@@ -114,10 +109,16 @@ func NewRandomFS(ipfsAPI string, httpPort int, dataDir string, cacheSize int64) 
 		return nil, fmt.Errorf("failed to connect to IPFS: %v", err)
 	}
 
-	log.Printf("RandomFS initialized with IPFS at %s, HTTP port %d, data dir %s",
-		ipfsAPI, httpPort, dataDir)
+	log.Printf("RandomFS initialized with IPFS at %s, data dir %s", ipfsAPI, dataDir)
 
 	return rfs, nil
+}
+
+// GetStats returns current system statistics
+func (rfs *RandomFS) GetStats() Stats {
+	rfs.mutex.RLock()
+	defer rfs.mutex.RUnlock()
+	return rfs.stats
 }
 
 // testIPFSConnection tests if IPFS daemon is accessible
@@ -133,23 +134,6 @@ func (rfs *RandomFS) testIPFSConnection() error {
 	}
 
 	return nil
-}
-
-// Start begins the HTTP server and background tasks
-func (rfs *RandomFS) Start() error {
-	router := mux.NewRouter()
-
-	// API endpoints
-	router.HandleFunc("/api/v1/store", rfs.handleStore).Methods("POST")
-	router.HandleFunc("/api/v1/retrieve/{hash}", rfs.handleRetrieve).Methods("GET")
-	router.HandleFunc("/api/v1/stats", rfs.handleStats).Methods("GET")
-	router.HandleFunc("/rd/{encodedURL:.*}", rfs.handleRandomURL).Methods("GET")
-
-	// Serve web interface
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./web/")))
-
-	log.Printf("Starting HTTP server on port %d", rfs.httpPort)
-	return http.ListenAndServe(fmt.Sprintf(":%d", rfs.httpPort), router)
 }
 
 // StoreFile stores a file in the randomized block format
@@ -454,97 +438,4 @@ func ParseRandomURL(rawURL string) (*RandomURL, error) {
 func (ru *RandomURL) String() string {
 	return fmt.Sprintf("rd://%s/%s/%d/%s/%d/%s",
 		ru.Host, ru.Version, ru.FileSize, ru.FileName, ru.Timestamp, ru.RepHash)
-}
-
-// HTTP Handlers
-
-func (rfs *RandomFS) handleStore(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	file, header, err := r.FormFile("file")
-	if err != nil {
-		http.Error(w, "Failed to read file: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
-
-	data, err := io.ReadAll(file)
-	if err != nil {
-		http.Error(w, "Failed to read file data: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	contentType := header.Header.Get("Content-Type")
-	if contentType == "" {
-		contentType = "application/octet-stream"
-	}
-
-	randomURL, err := rfs.StoreFile(header.Filename, data, contentType)
-	if err != nil {
-		http.Error(w, "Failed to store file: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{
-		"url":  randomURL.String(),
-		"hash": randomURL.RepHash,
-	})
-}
-
-func (rfs *RandomFS) handleRetrieve(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	hash := vars["hash"]
-
-	data, rep, err := rfs.RetrieveFile(hash)
-	if err != nil {
-		http.Error(w, "Failed to retrieve file: "+err.Error(), http.StatusNotFound)
-		return
-	}
-
-	w.Header().Set("Content-Type", rep.ContentType)
-	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", rep.FileName))
-	w.Header().Set("Content-Length", strconv.FormatInt(rep.FileSize, 10))
-	w.Write(data)
-}
-
-func (rfs *RandomFS) handleRandomURL(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	encodedURL := vars["encodedURL"]
-
-	// Decode the URL
-	decodedURL, err := base64.URLEncoding.DecodeString(encodedURL)
-	if err != nil {
-		http.Error(w, "Invalid encoded URL: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	randomURL, err := ParseRandomURL(string(decodedURL))
-	if err != nil {
-		http.Error(w, "Invalid rd:// URL: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	data, rep, err := rfs.RetrieveFile(randomURL.RepHash)
-	if err != nil {
-		http.Error(w, "Failed to retrieve file: "+err.Error(), http.StatusNotFound)
-		return
-	}
-
-	w.Header().Set("Content-Type", rep.ContentType)
-	w.Header().Set("Content-Disposition", fmt.Sprintf("inline; filename=\"%s\"", rep.FileName))
-	w.Header().Set("Content-Length", strconv.FormatInt(rep.FileSize, 10))
-	w.Write(data)
-}
-
-func (rfs *RandomFS) handleStats(w http.ResponseWriter, r *http.Request) {
-	rfs.mutex.RLock()
-	stats := rfs.stats
-	rfs.mutex.RUnlock()
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(stats)
 }

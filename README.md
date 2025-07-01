@@ -1,240 +1,211 @@
-# RandomFS - Modern Owner Free File System
+# RandomFS - Owner Free File System
 
-RandomFS is a modern Go implementation of the Owner Free File System (OFF System) concept, inspired by [js-offs](https://github.com/Prometheus-SCN/js-offs) but built with IPFS as the backing storage layer and enhanced with modern improvements.
+A modern implementation of the Owner Free File System (OFFS) concept using IPFS as the backing store. Files are split into randomized blocks that appear as noise, providing deniability while maintaining the ability to reconstruct original files using rd:// URLs.
 
-## Overview
+## Project Structure
 
-RandomFS implements the innovative concept of "owner-free" file storage where files are split into randomized, multi-use data blocks. Each block appears as digital noise individually but can be mathematically combined to reconstruct the original files. This approach provides:
+This repository contains four independent components that can be used separately or together:
 
-- **Privacy**: Individual blocks contain no identifiable file data
-- **Redundancy**: Blocks are shared across multiple files
-- **Permanence**: Files persist as long as the network exists
-- **Censorship Resistance**: No central authority controls the data
+### 🧠 [randomfs-core](randomfs-core/)
+**Core Library** - Pure Go library for programmatic access to RandomFS functionality.
 
-## Key Features
+- Multi-tier block sizing (1KB, 64KB, 1MB)
+- XOR-based block randomization
+- IPFS HTTP API integration
+- LRU caching system
+- rd:// URL scheme implementation
 
-### 🔄 **Randomized Block Storage**
-- Files are split into randomized blocks using XOR operations
-- Each block can be part of multiple files simultaneously
-- Three optimized block sizes (1KB, 64KB, 1MB) based on file size
+### 💻 [randomfs-cli](randomfs-cli/)
+**Command Line Interface** - Full-featured CLI tool built with Cobra.
 
-### 🌐 **IPFS Integration**
-- Uses [Kubo (go-ipfs)](https://github.com/ipfs/kubo) as the decentralized storage layer
-- Automatic block distribution across the IPFS network
-- Content-addressed storage ensures data integrity
+- File storage and retrieval
+- rd:// URL parsing and generation
+- System statistics
+- Verbose output and debugging
+- Shell completion support
 
-### 🔗 **rd:// URL Scheme**
-- Custom URL scheme for accessing stored files
-- Format: `rd://host/version/filesize/filename/timestamp/hash`
-- Enables direct browser access to files via HTTP gateway
+### 🌐 [randomfs-http](randomfs-http/)
+**HTTP Server** - Production-ready REST API server with web interface.
 
-### ⚡ **Performance Optimizations**
-- Local block caching for faster retrieval
-- Intelligent block size selection
-- Concurrent operations for better throughput
+- REST API for programmatic access
+- Modern web interface
+- CORS support
+- Health monitoring
+- Configurable deployment
 
-### 🎯 **Modern Web Interface**
+### 🎨 [randomfs-web](randomfs-web/)
+**Web Interface** - Standalone web application for browser-based file management.
+
 - Drag-and-drop file upload
-- Real-time progress tracking
-- System statistics dashboard
-- Mobile-responsive design
+- Real-time statistics
+- Responsive design
+- Cross-browser compatibility
+- No framework dependencies
+
+## Quick Start
+
+### Option 1: Use Individual Components
+
+```bash
+# Core library only
+cd randomfs-core
+go build
+
+# CLI tool
+cd randomfs-cli
+go build
+./randomfs-cli store example.txt
+
+# HTTP server
+cd randomfs-http
+go build
+./randomfs-http -port 8080
+
+# Web interface (standalone)
+cd randomfs-web
+python3 -m http.server 8000
+```
+
+### Option 2: Use HTTP Server with Web Interface
+
+```bash
+# Start HTTP server with web interface
+cd randomfs-http
+go build
+./randomfs-http -web ../randomfs-web
+
+# Open browser to http://localhost:8080
+```
+
+### Option 3: Use CLI for File Operations
+
+```bash
+# Store a file
+cd randomfs-cli
+go build
+./randomfs-cli store example.txt
+
+# Download using rd:// URL
+./randomfs-cli download rd://QmX...abc/text/plain/example.txt
+```
+
+## Features
+
+### 🔐 Owner Free File System
+- **Deniability**: Individual blocks appear as random data
+- **Reconstruction**: Original files can be perfectly reconstructed
+- **Decentralized**: Uses IPFS for distributed storage
+- **Privacy**: No metadata linking blocks to original files
+
+### 📊 Multi-tier Block Sizing
+- **Small files (< 1MB)**: 1KB blocks for efficiency
+- **Medium files (1MB - 64MB)**: 64KB blocks for balance
+- **Large files (> 64MB)**: 1MB blocks for performance
+
+### 🔗 rd:// URL Scheme
+Files are accessed using the custom rd:// URL format:
+```
+rd://<representation-hash>/<content-type>/<original-filename>
+```
+
+### 🚀 Performance Optimizations
+- **LRU Caching**: Configurable block caching
+- **HTTP API**: Direct IPFS integration without complex dependencies
+- **Efficient Storage**: Optimized block size selection
+- **Parallel Processing**: Concurrent block operations
 
 ## Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Web Client    │    │   RandomFS API  │    │   IPFS Network  │
-│                 │    │                 │    │                 │
-│ • File Upload   │◄──►│ • Block Gen.    │◄──►│ • Distributed   │
-│ • rd:// URLs    │    │ • Caching       │    │   Storage       │
-│ • Statistics    │    │ • HTTP Gateway  │    │ • Content Hash  │
+│   randomfs-web  │    │  randomfs-http  │    │  randomfs-cli   │
+│   (Frontend)    │    │   (API Server)  │    │  (CLI Tool)     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                    ┌─────────────────┐
+                    │  randomfs-core  │
+                    │  (Core Library) │
+                    └─────────────────┘
+                                 │
+                    ┌─────────────────┐
+                    │      IPFS       │
+                    │  (Backend Store)│
+                    └─────────────────┘
 ```
 
-## Installation
+## Dependencies
 
-### Prerequisites
+- **Go 1.21+** - For all Go components
+- **IPFS Node (Kubo)** - With HTTP API enabled
+- **Modern Web Browser** - For web interface
 
-1. **Go 1.21+**
-2. **IPFS Node** (Kubo)
-   ```bash
-   # Install IPFS
-   wget https://dist.ipfs.tech/kubo/v0.24.0/kubo_v0.24.0_linux-amd64.tar.gz
-   tar -xzf kubo_v0.24.0_linux-amd64.tar.gz
-   sudo ./kubo/install.sh
-   
-   # Initialize and start IPFS
-   ipfs init
-   ipfs daemon
-   ```
+## Development
 
-### Build from Source
+Each component is designed to be developed independently:
 
 ```bash
-# Clone the repository
-git clone https://github.com/TheEntropyCollective/randomfs-core.git
+# Core library development
 cd randomfs-core
+go test -v
+go build
 
-# Build the application
-go build -o randomfs ./cmd/randomfs
+# CLI development
+cd randomfs-cli
+go test -v
+go build
 
-# Run RandomFS
-./randomfs -port 8080 -ipfs localhost:5001
+# HTTP server development
+cd randomfs-http
+go test -v
+go build
+
+# Web interface development
+cd randomfs-web
+# Edit HTML/CSS/JS files
+python3 -m http.server 8000
 ```
 
-### Using Go Install
+## Deployment
 
-```bash
-go install github.com/TheEntropyCollective/randomfs-core/cmd/randomfs@latest
-randomfs -port 8080
-```
+### Production Deployment
+Each component can be deployed independently:
 
-## Usage
+- **Core Library**: Import as Go module
+- **CLI Tool**: Install binary on target systems
+- **HTTP Server**: Deploy as systemd service with nginx reverse proxy
+- **Web Interface**: Deploy to static hosting (GitHub Pages, Netlify, etc.)
 
-### Starting the Server
-
-```bash
-# Default configuration
-./randomfs
-
-# Custom configuration
-./randomfs -port 8080 -ipfs localhost:5001 -data ./data -cache 1073741824
-```
-
-### Command Line Options
-
-- `-port`: HTTP server port (default: 8080)
-- `-ipfs`: IPFS API endpoint (default: localhost:5001)
-- `-data`: Data directory (default: ./data)
-- `-cache`: Cache size in bytes (default: 500MB)
-
-### Web Interface
-
-1. Open `http://localhost:8080` in your browser
-2. Drag and drop files or click to browse
-3. Get rd:// URLs for uploaded files
-4. Share URLs for decentralized access
-
-### API Endpoints
-
-#### Store File
-```bash
-curl -X POST -F "file=@example.txt" http://localhost:8080/api/v1/store
-```
-
-Response:
-```json
-{
-  "url": "rd://randomfs/v4/1024/example.txt/1640995200/QmHash123...",
-  "hash": "QmHash123..."
-}
-```
-
-#### Retrieve File
-```bash
-curl http://localhost:8080/api/v1/retrieve/QmHash123...
-```
-
-#### Access via rd:// URL
-```bash
-# Base64 encode the rd:// URL and access via HTTP
-curl http://localhost:8080/rd/cmQ6Ly9yYW5kb21mcy92NC8xMDI0L2V4YW1wbGUudHh0LzE2NDA5OTUyMDAvUW1IYXNoMTIz
-```
-
-#### System Statistics
-```bash
-curl http://localhost:8080/api/v1/stats
-```
-
-## rd:// URL Format
-
-The rd:// URL scheme provides a standardized way to reference files in the RandomFS network:
-
-```
-rd://host/version/filesize/filename/timestamp/representation_hash
-```
-
-- **host**: Network identifier (e.g., "randomfs")
-- **version**: Protocol version (e.g., "v4")
-- **filesize**: Original file size in bytes
-- **filename**: Original filename
-- **timestamp**: Unix timestamp of storage
-- **representation_hash**: IPFS hash of file representation metadata
-
-### Example
-```
-rd://randomfs/v4/2048/document.pdf/1640995200/QmYwAPJzv5CZsnA8VQF4EjA6JBGn2vqb9kj9xhQ3xNK8F1
-```
-
-## Block Storage Algorithm
-
-RandomFS uses a sophisticated multi-use block generation algorithm:
-
-1. **File Analysis**: Determine optimal block size based on file size
-2. **Block Generation**: Split file into chunks and XOR with random data
-3. **IPFS Storage**: Store randomized blocks in IPFS network
-4. **Metadata Creation**: Generate file representation with block references
-5. **URL Generation**: Create rd:// URL for file access
-
-### Block Size Selection
-- **Nano blocks (1KB)**: Files ≤ 100KB
-- **Mini blocks (64KB)**: Files ≤ 10MB  
-- **Standard blocks (1MB)**: Files > 10MB
-
-## Security Considerations
-
-- **Block Randomization**: Individual blocks appear as random noise
-- **No Direct Mapping**: No one-to-one relationship between blocks and files
-- **Distributed Storage**: Blocks spread across IPFS network
-- **Content Addressing**: IPFS ensures data integrity via cryptographic hashing
-
-## Performance
-
-RandomFS is optimized for performance with:
-
-- **Local Caching**: Frequently accessed blocks cached in memory
-- **Concurrent Operations**: Parallel block processing
-- **Smart Prefetching**: Predictive block loading
-- **Connection Pooling**: Efficient IPFS API usage
-
-## Comparison with Original js-offs
-
-| Feature | js-offs | RandomFS |
-|---------|---------|----------|
-| Language | JavaScript/Node.js | Go |
-| Storage Backend | Custom P2P | IPFS |
-| Block Sizes | Fixed size | 3 adaptive sizes |
-| Web Interface | Vue.js | Vanilla JS |
-| Caching | Basic | Advanced LRU |
-| URL Scheme | /offsystem/v3/... | rd://... |
-| Performance | Good | Optimized |
+### Docker Deployment
+Each component includes Docker support for containerized deployment.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Choose the component you want to contribute to
+2. Fork the specific repository
+3. Create a feature branch
+4. Make your changes
+5. Add tests
+6. Submit a pull request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+## Related Projects
 
-- Original OFF System concept by [The Big Hack](http://offsystem.sourceforge.net/)
-- [js-offs](https://github.com/Prometheus-SCN/js-offs) implementation by Prometheus SCN
-- [IPFS](https://ipfs.tech/) for providing the distributed storage foundation
-- [Kubo](https://github.com/ipfs/kubo) for the IPFS implementation
+- **IPFS** - InterPlanetary File System
+- **js-offs** - Original Owner Free File System concept
+- **Kubo** - IPFS implementation
 
-## Links
+## Community
 
-- [Original OFF System](http://offsystem.sourceforge.net/)
-- [js-offs Implementation](https://github.com/Prometheus-SCN/js-offs)
-- [IPFS Documentation](https://docs.ipfs.tech/)
-- [OFF System Website](https://www.off.systems/)
+- **GitHub**: [TheEntropyCollective](https://github.com/TheEntropyCollective)
+- **Issues**: Report bugs and request features
+- **Discussions**: Join community discussions
+- **Wiki**: Documentation and guides
 
 ---
 
-**RandomFS**: Own nothing. Access everything. 🌐 
+**RandomFS** - Making file storage truly decentralized and owner-free. 🌌 
