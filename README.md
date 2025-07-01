@@ -61,6 +61,9 @@ cd randomfs-http
 go build
 ./randomfs-http -port 8080
 
+# HTTP server without IPFS (for testing)
+./randomfs-http -port 8080 -no-ipfs
+
 # Web interface (standalone)
 cd randomfs-web
 python3 -m http.server 8000
@@ -73,6 +76,9 @@ python3 -m http.server 8000
 cd randomfs-http
 go build
 ./randomfs-http -web ../randomfs-web
+
+# Start HTTP server without IPFS (for testing)
+./randomfs-http -web ../randomfs-web -no-ipfs
 
 # Open browser to http://localhost:8080
 ```
