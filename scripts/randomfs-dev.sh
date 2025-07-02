@@ -1,0 +1,315 @@
+#!/bin/bash
+
+# RandomFS Development Environment Manager
+# Usage: ./randomfs-dev.sh [start|stop|restart|build|status]
+
+set -e
+
+# Configuration
+RANDOMFS_ROOT="/Users/jconnuck/TheEntropyCollective/randomfs"
+IPFS_API="http://localhost:5001"
+HTTP_PORT=8081
+WEB_PORT=3000
+DATA_DIR="$RANDOMFS_ROOT/data"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Logging functions
+log_info() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+log_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+log_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+# Check if IPFS is running
+check_ipfs() {
+    if curl -s "$IPFS_API/api/v0/version" > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Check if a port is in use
+check_port() {
+    local port=$1
+    if lsof -i :$port > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Build all RandomFS components
+build_all() {
+    log_info "Building all RandomFS components..."
+    
+    cd "$RANDOMFS_ROOT"
+    
+    # Create bin directory if it doesn't exist
+    mkdir -p bin
+    
+    # Build core library
+    log_info "Building randomfs-core..."
+    cd randomfs-core
+    go build ./pkg/randomfs
+    cd ..
+    
+    # Build CLI
+    log_info "Building randomfs-cli..."
+    cd randomfs-cli
+    go build -o ../bin/randomfs-cli ./cmd/randomfs-cli
+    cd ..
+    
+    # Build HTTP server
+    log_info "Building randomfs-http..."
+    cd randomfs-http
+    go build -o ../bin/randomfs-http ./cmd/randomfs-http
+    cd ..
+    
+    # Build web server
+    log_info "Building randomfs-web..."
+    cd randomfs-web
+    go build -o ../bin/randomfs-web ./cmd/randomfs-web
+    cd ..
+    
+    log_success "All components built successfully!"
+}
+
+# Start IPFS daemon
+start_ipfs() {
+    if check_ipfs; then
+        log_warning "IPFS is already running"
+        return
+    fi
+    
+    log_info "Starting IPFS daemon..."
+    ipfs daemon > /dev/null 2>&1 &
+    local ipfs_pid=$!
+    
+    # Wait for IPFS to be ready
+    log_info "Waiting for IPFS to be ready..."
+    for i in {1..30}; do
+        if check_ipfs; then
+            log_success "IPFS started successfully (PID: $ipfs_pid)"
+            return
+        fi
+        sleep 1
+    done
+    
+    log_error "IPFS failed to start within 30 seconds"
+    exit 1
+}
+
+# Start HTTP server
+start_http() {
+    if check_port $HTTP_PORT; then
+        log_warning "HTTP server is already running on port $HTTP_PORT"
+        return
+    fi
+    
+    log_info "Starting RandomFS HTTP server on port $HTTP_PORT..."
+    cd "$RANDOMFS_ROOT"
+    ./bin/randomfs-http -port $HTTP_PORT -data "$DATA_DIR/http" -ipfs "$IPFS_API" > /dev/null 2>&1 &
+    local http_pid=$!
+    
+    # Wait for HTTP server to be ready
+    log_info "Waiting for HTTP server to be ready..."
+    for i in {1..10}; do
+        if check_port $HTTP_PORT; then
+            log_success "HTTP server started successfully (PID: $http_pid)"
+            return
+        fi
+        sleep 1
+    done
+    
+    log_error "HTTP server failed to start within 10 seconds"
+    exit 1
+}
+
+# Start web server
+start_web() {
+    if check_port $WEB_PORT; then
+        log_warning "Web server is already running on port $WEB_PORT"
+        return
+    fi
+    
+    log_info "Starting RandomFS web server on port $WEB_PORT..."
+    cd "$RANDOMFS_ROOT"
+    
+    # Set environment variables for the web server
+    export RANDOMFS_PORT=$WEB_PORT
+    export RANDOMFS_DATA_DIR="$DATA_DIR/web"
+    export RANDOMFS_IPFS_API="$IPFS_API"
+    
+    ./bin/randomfs-web > /dev/null 2>&1 &
+    local web_pid=$!
+    
+    # Wait for web server to be ready
+    log_info "Waiting for web server to be ready..."
+    for i in {1..10}; do
+        if check_port $WEB_PORT; then
+            log_success "Web server started successfully (PID: $web_pid)"
+            return
+        fi
+        sleep 1
+    done
+    
+    log_error "Web server failed to start within 10 seconds"
+    exit 1
+}
+
+# Start everything
+start_all() {
+    log_info "Starting RandomFS development environment..."
+    
+    # Create data directories
+    mkdir -p "$DATA_DIR/http" "$DATA_DIR/web"
+    
+    # Start IPFS
+    start_ipfs
+    
+    # Start servers
+    start_http
+    start_web
+    
+    log_success "RandomFS development environment started!"
+    echo
+    log_info "Services running:"
+    echo "  - IPFS API: $IPFS_API"
+    echo "  - HTTP Server: http://localhost:$HTTP_PORT"
+    echo "  - Web Interface: http://localhost:$WEB_PORT"
+    echo
+    log_info "Use './scripts/randomfs-dev.sh stop' to shut everything down"
+}
+
+# Stop everything
+stop_all() {
+    log_info "Stopping RandomFS development environment..."
+    
+    # Stop RandomFS processes
+    pkill -f "randomfs-http" 2>/dev/null || true
+    pkill -f "randomfs-web" 2>/dev/null || true
+    
+    # Stop IPFS
+    pkill -f "ipfs daemon" 2>/dev/null || true
+    
+    # Wait a moment for processes to stop
+    sleep 2
+    
+    # Check if anything is still running
+    if pgrep -f "randomfs" > /dev/null 2>&1; then
+        log_warning "Some RandomFS processes may still be running"
+    fi
+    
+    if check_ipfs; then
+        log_warning "IPFS may still be running"
+    fi
+    
+    log_success "RandomFS development environment stopped!"
+}
+
+# Show status
+show_status() {
+    echo "RandomFS Development Environment Status"
+    echo "======================================"
+    echo
+    
+    # Check IPFS
+    if check_ipfs; then
+        echo -e "IPFS API (port 5001): ${GREEN}RUNNING${NC}"
+    else
+        echo -e "IPFS API (port 5001): ${RED}STOPPED${NC}"
+    fi
+    
+    # Check HTTP server
+    if check_port $HTTP_PORT; then
+        echo -e "HTTP Server (port $HTTP_PORT): ${GREEN}RUNNING${NC}"
+    else
+        echo -e "HTTP Server (port $HTTP_PORT): ${RED}STOPPED${NC}"
+    fi
+    
+    # Check web server
+    if check_port $WEB_PORT; then
+        echo -e "Web Server (port $WEB_PORT): ${GREEN}RUNNING${NC}"
+    else
+        echo -e "Web Server (port $WEB_PORT): ${RED}STOPPED${NC}"
+    fi
+    
+    # Check binaries
+    echo
+    echo "Binaries:"
+    if [ -f "$RANDOMFS_ROOT/bin/randomfs-cli" ]; then
+        echo -e "  randomfs-cli: ${GREEN}EXISTS${NC}"
+    else
+        echo -e "  randomfs-cli: ${RED}MISSING${NC}"
+    fi
+    
+    if [ -f "$RANDOMFS_ROOT/bin/randomfs-http" ]; then
+        echo -e "  randomfs-http: ${GREEN}EXISTS${NC}"
+    else
+        echo -e "  randomfs-http: ${RED}MISSING${NC}"
+    fi
+    
+    if [ -f "$RANDOMFS_ROOT/bin/randomfs-web" ]; then
+        echo -e "  randomfs-web: ${GREEN}EXISTS${NC}"
+    else
+        echo -e "  randomfs-web: ${RED}MISSING${NC}"
+    fi
+}
+
+# Main script logic
+case "${1:-}" in
+    "start")
+        start_all
+        ;;
+    "stop")
+        stop_all
+        ;;
+    "restart")
+        stop_all
+        sleep 2
+        start_all
+        ;;
+    "build")
+        build_all
+        ;;
+    "status")
+        show_status
+        ;;
+    *)
+        echo "RandomFS Development Environment Manager"
+        echo "========================================"
+        echo
+        echo "Usage: $0 [start|stop|restart|build|status]"
+        echo
+        echo "Commands:"
+        echo "  start   - Build all components and start the development environment"
+        echo "  stop    - Stop all RandomFS services and IPFS"
+        echo "  restart - Restart the entire development environment"
+        echo "  build   - Build all RandomFS components"
+        echo "  status  - Show status of all services"
+        echo
+        echo "Services:"
+        echo "  - IPFS API: $IPFS_API"
+        echo "  - HTTP Server: http://localhost:$HTTP_PORT"
+        echo "  - Web Interface: http://localhost:$WEB_PORT"
+        echo
+        exit 1
+        ;;
+esac 
