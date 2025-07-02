@@ -193,11 +193,11 @@ start_web() {
     if [ "$NO_IPFS" = true ]; then
         log_info "Starting web server without IPFS..."
         # Don't set IPFS API environment variable
+        ./bin/randomfs-web --no-ipfs > /dev/null 2>&1 &
     else
         export RANDOMFS_IPFS_API="$IPFS_API"
+        ./bin/randomfs-web > /dev/null 2>&1 &
     fi
-    
-    ./bin/randomfs-web > /dev/null 2>&1 &
     local web_pid=$!
     
     # Wait for web server to be ready
