@@ -1,9 +1,31 @@
 #!/bin/bash
 
 # RandomFS Development Environment Manager
-# Usage: ./randomfs-dev.sh [start|stop|restart|build|status]
+# Usage: ./randomfs-dev.sh [start|stop|restart|build|status] [--no-ipfs]
 
 set -e
+
+# Parse command line arguments
+NO_IPFS=false
+COMMAND=""
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --no-ipfs)
+            NO_IPFS=true
+            shift
+            ;;
+        start|stop|restart|build|status)
+            COMMAND="$1"
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
 
 # Configuration
 RANDOMFS_ROOT="/Users/jconnuck/TheEntropyCollective/randomfs"
@@ -130,7 +152,14 @@ start_http() {
     
     log_info "Starting RandomFS HTTP server on port $HTTP_PORT..."
     cd "$RANDOMFS_ROOT"
-    ./bin/randomfs-http -port $HTTP_PORT -data "$DATA_DIR/http" -ipfs "$IPFS_API" > /dev/null 2>&1 &
+    
+    if [ "$NO_IPFS" = true ]; then
+        log_info "Starting HTTP server without IPFS..."
+        ./bin/randomfs-http -port $HTTP_PORT -data "$DATA_DIR/http" > /dev/null 2>&1 &
+    else
+        ./bin/randomfs-http -port $HTTP_PORT -data "$DATA_DIR/http" -ipfs "$IPFS_API" > /dev/null 2>&1 &
+    fi
+    
     local http_pid=$!
     
     # Wait for HTTP server to be ready
@@ -160,7 +189,13 @@ start_web() {
     # Set environment variables for the web server
     export RANDOMFS_PORT=$WEB_PORT
     export RANDOMFS_DATA_DIR="$DATA_DIR/web"
-    export RANDOMFS_IPFS_API="$IPFS_API"
+    
+    if [ "$NO_IPFS" = true ]; then
+        log_info "Starting web server without IPFS..."
+        # Don't set IPFS API environment variable
+    else
+        export RANDOMFS_IPFS_API="$IPFS_API"
+    fi
     
     ./bin/randomfs-web > /dev/null 2>&1 &
     local web_pid=$!
@@ -181,13 +216,21 @@ start_web() {
 
 # Start everything
 start_all() {
-    log_info "Starting RandomFS development environment..."
+    if [ "$NO_IPFS" = true ]; then
+        log_info "Starting RandomFS development environment (IPFS disabled)"
+    else
+        log_info "Starting RandomFS development environment..."
+    fi
     
     # Create data directories
     mkdir -p "$DATA_DIR/http" "$DATA_DIR/web"
     
-    # Start IPFS
-    start_ipfs
+    # Start IPFS (unless --no-ipfs flag is used)
+    if [ "$NO_IPFS" = true ]; then
+        log_info "Skipping IPFS startup (--no-ipfs flag used)"
+    else
+        start_ipfs
+    fi
     
     # Start servers
     start_http
@@ -196,7 +239,11 @@ start_all() {
     log_success "RandomFS development environment started!"
     echo
     log_info "Services running:"
-    echo "  - IPFS API: $IPFS_API"
+    if [ "$NO_IPFS" = true ]; then
+        echo "  - IPFS API: DISABLED (--no-ipfs flag used)"
+    else
+        echo "  - IPFS API: $IPFS_API"
+    fi
     echo "  - HTTP Server: http://localhost:$HTTP_PORT"
     echo "  - Web Interface: http://localhost:$WEB_PORT"
     echo
@@ -211,28 +258,37 @@ stop_all() {
     pkill -f "randomfs-http" 2>/dev/null || true
     pkill -f "randomfs-web" 2>/dev/null || true
     
-    # Stop IPFS
-    pkill -f "ipfs daemon" 2>/dev/null || true
+    # Stop IPFS (unless --no-ipfs flag is used)
+    if [ "$NO_IPFS" = true ]; then
+        log_info "Skipping IPFS shutdown (--no-ipfs flag used)"
+    else
+        pkill -f "ipfs daemon" 2>/dev/null || true
+    fi
     
     # Wait for processes to fully stop and ports to be released
     log_info "Waiting for processes to stop and ports to be released..."
     for i in {1..15}; do
-        if ! pgrep -f "randomfs" > /dev/null 2>&1 && ! check_ipfs && ! check_port $HTTP_PORT && ! check_port $WEB_PORT; then
+        if ! pgrep -f "randomfs" > /dev/null 2>&1 && ! check_port $HTTP_PORT && ! check_port $WEB_PORT; then
             break
+        fi
+        if [ "$NO_IPFS" = false ] && check_ipfs; then
+            continue
         fi
         sleep 1
     done
     
     # Force kill any remaining processes
     pkill -9 -f "randomfs" 2>/dev/null || true
-    pkill -9 -f "ipfs daemon" 2>/dev/null || true
+    if [ "$NO_IPFS" = false ]; then
+        pkill -9 -f "ipfs daemon" 2>/dev/null || true
+    fi
     
     # Final check
     if pgrep -f "randomfs" > /dev/null 2>&1; then
         log_warning "Some RandomFS processes may still be running"
     fi
     
-    if check_ipfs; then
+    if [ "$NO_IPFS" = false ] && check_ipfs; then
         log_warning "IPFS may still be running"
     fi
     
@@ -289,7 +345,7 @@ show_status() {
 }
 
 # Main script logic
-case "${1:-}" in
+case "$COMMAND" in
     "start")
         start_all
         ;;
@@ -309,11 +365,11 @@ case "${1:-}" in
     "status")
         show_status
         ;;
-    *)
+    "")
         echo "RandomFS Development Environment Manager"
         echo "========================================"
         echo
-        echo "Usage: $0 [start|stop|restart|build|status]"
+        echo "Usage: $0 [start|stop|restart|build|status] [--no-ipfs]"
         echo
         echo "Commands:"
         echo "  start   - Build all components and start the development environment"
@@ -322,8 +378,11 @@ case "${1:-}" in
         echo "  build   - Build all RandomFS components"
         echo "  status  - Show status of all services"
         echo
+        echo "Options:"
+        echo "  --no-ipfs - Run without IPFS (useful for development/testing)"
+        echo
         echo "Services:"
-        echo "  - IPFS API: $IPFS_API"
+        echo "  - IPFS API: $IPFS_API (disabled with --no-ipfs)"
         echo "  - HTTP Server: http://localhost:$HTTP_PORT"
         echo "  - Web Interface: http://localhost:$WEB_PORT"
         echo
