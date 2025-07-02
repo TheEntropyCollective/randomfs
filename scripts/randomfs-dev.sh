@@ -88,6 +88,11 @@ build_all() {
     go build -o ../bin/randomfs-web ./cmd/randomfs-web
     cd ..
     
+    # Copy web assets
+    log_info "Copying web assets..."
+    mkdir -p bin/web
+    cp -r randomfs-web/assets/web/* bin/web/
+    
     log_success "All components built successfully!"
 }
 
@@ -209,10 +214,20 @@ stop_all() {
     # Stop IPFS
     pkill -f "ipfs daemon" 2>/dev/null || true
     
-    # Wait a moment for processes to stop
-    sleep 2
+    # Wait for processes to fully stop and ports to be released
+    log_info "Waiting for processes to stop and ports to be released..."
+    for i in {1..15}; do
+        if ! pgrep -f "randomfs" > /dev/null 2>&1 && ! check_ipfs && ! check_port $HTTP_PORT && ! check_port $WEB_PORT; then
+            break
+        fi
+        sleep 1
+    done
     
-    # Check if anything is still running
+    # Force kill any remaining processes
+    pkill -9 -f "randomfs" 2>/dev/null || true
+    pkill -9 -f "ipfs daemon" 2>/dev/null || true
+    
+    # Final check
     if pgrep -f "randomfs" > /dev/null 2>&1; then
         log_warning "Some RandomFS processes may still be running"
     fi
@@ -283,7 +298,8 @@ case "${1:-}" in
         ;;
     "restart")
         stop_all
-        sleep 2
+        log_info "Waiting additional time for system to stabilize..."
+        sleep 3
         start_all
         ;;
     "build")

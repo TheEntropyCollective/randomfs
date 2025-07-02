@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RandomFS - Font Options Showcase</title>
+    
+    <!-- Google Fonts - All the suggested fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;700&family=Rajdhani:wght@400;600;700&family=Quantico:wght@400;700&family=Audiowide&family=Michroma&family=Share+Tech+Mono&family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&family=Saira:wght@400;600;700&family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:wght@400;600;700&family=IBM+Plex+Serif:wght@400;500;600&family=Source+Serif+Pro:wght@400;600;700&family=Crimson+Text:wght@400;600;700&family=Spectral:wght@400;500;600&family=Lora:wght@400;500;600&family=Merriweather:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .font-section {
+            margin-bottom: 4rem;
+            padding: 2rem;
+            border-radius: 15px;
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+        }
+
+        .font-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .font-option {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .font-option h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        .font-preview {
+            margin-bottom: 1rem;
+        }
+
+        .font-name {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .font-example {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #4a5568;
+        }
+
+        .randomfs-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 1rem;
+        }
+
+        .body-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+
+        .code-text {
+            font-family: inherit;
+            background: #f7fafc;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .css-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .recommendation h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Retro-Futurism Fonts */
+        .retro-futurism .font-option:nth-child(1) .randomfs-title { font-family: 'Orbitron', monospace; }
+        .retro-futurism .font-option:nth-child(1) .subtitle { font-family: 'Exo 2', sans-serif; }
+        .retro-futurism .font-option:nth-child(1) .body-text { font-family: 'Rajdhani', sans-serif; }
+
+        .retro-futurism .font-option:nth-child(2) .randomfs-title { font-family: 'Quantico', sans-serif; }
+        .retro-futurism .font-option:nth-child(2) .subtitle { font-family: 'Audiowide', cursive; }
+        .retro-futurism .font-option:nth-child(2) .body-text { font-family: 'Michroma', sans-serif; }
+
+        .retro-futurism .font-option:nth-child(3) .randomfs-title { font-family: 'Share Tech Mono', monospace; }
+        .retro-futurism .font-option:nth-child(3) .subtitle { font-family: 'Courier Prime', monospace; }
+        .retro-futurism .font-option:nth-child(3) .body-text { font-family: 'IBM Plex Mono', monospace; }
+
+        .retro-futurism .font-option:nth-child(4) .randomfs-title { font-family: 'Saira', sans-serif; }
+        .retro-futurism .font-option:nth-child(4) .subtitle { font-family: 'Exo 2', sans-serif; }
+        .retro-futurism .font-option:nth-child(4) .body-text { font-family: 'Inter', sans-serif; }
+
+        /* Neoclassical Fonts */
+        .neoclassical .font-option:nth-child(1) .randomfs-title { font-family: 'Playfair Display', serif; }
+        .neoclassical .font-option:nth-child(1) .subtitle { font-family: 'Cormorant Garamond', serif; }
+        .neoclassical .font-option:nth-child(1) .body-text { font-family: 'Georgia', serif; }
+
+        .neoclassical .font-option:nth-child(2) .randomfs-title { font-family: 'IBM Plex Serif', serif; }
+        .neoclassical .font-option:nth-child(2) .subtitle { font-family: 'Source Serif Pro', serif; }
+        .neoclassical .font-option:nth-child(2) .body-text { font-family: 'Crimson Text', serif; }
+
+        .neoclassical .font-option:nth-child(3) .randomfs-title { font-family: 'Spectral', serif; }
+        .neoclassical .font-option:nth-child(3) .subtitle { font-family: 'Lora', serif; }
+        .neoclassical .font-option:nth-child(3) .body-text { font-family: 'Merriweather', serif; }
+
+        /* Hybrid Options */
+        .hybrid .font-option:nth-child(1) .randomfs-title { font-family: 'Orbitron', monospace; }
+        .hybrid .font-option:nth-child(1) .subtitle { font-family: 'Inter', system-ui, sans-serif; }
+        .hybrid .font-option:nth-child(1) .body-text { font-family: 'IBM Plex Serif', Georgia, serif; }
+
+        .hybrid .font-option:nth-child(2) .randomfs-title { font-family: 'Playfair Display', serif; }
+        .hybrid .font-option:nth-child(2) .subtitle { font-family: 'Source Serif Pro', Georgia, serif; }
+        .hybrid .font-option:nth-child(2) .body-text { font-family: 'IBM Plex Mono', monospace; }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            transition: transform 0.2s;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← Back to RandomFS</a>
+        
+        <h1>RandomFS Font Options Showcase</h1>
+        
+        <div class="font-section retro-futurism">
+            <h2>🚀 Retro-Futurism Fonts</h2>
+            <p style="margin-bottom: 2rem; color: #718096;">Sci-fi aesthetic with cutting-edge, futuristic appeal</p>
+            
+            <div class="font-option">
+                <h3>Classic Retro-Future</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* Classic retro-future */
+font-family: 'Orbitron', 'Exo 2', 'Rajdhani', monospace;
+                </div>
+            </div>
+
+            <div class="font-option">
+                <h3>Subtle Retro-Tech</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* More subtle retro-tech */
+font-family: 'Quantico', 'Audiowide', 'Michroma', sans-serif;
+                </div>
+            </div>
+
+            <div class="font-option">
+                <h3>80s Computer Terminal</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* 80s computer terminal vibe */
+font-family: 'Share Tech Mono', 'Courier Prime', 'IBM Plex Mono', monospace;
+                </div>
+            </div>
+
+            <div class="font-option">
+                <h3>Geometric Future Feel</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* Geometric, slightly compressed future feel */
+font-family: 'Saira', 'Exo 2', 'Inter', sans-serif;
+                </div>
+            </div>
+        </div>
+
+        <div class="font-section neoclassical">
+            <h2>🏛️ Neoclassical Fonts</h2>
+            <p style="margin-bottom: 2rem; color: #718096;">Elegant, timeless serif options with institutional gravitas</p>
+            
+            <div class="font-option">
+                <h3>Modern Neoclassical</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* Modern neoclassical */
+font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+                </div>
+            </div>
+
+            <div class="font-option">
+                <h3>Tech Meets Classical</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* Tech meets classical */
+font-family: 'IBM Plex Serif', 'Source Serif Pro', 'Crimson Text', serif;
+                </div>
+            </div>
+
+            <div class="font-option">
+                <h3>Distinctive Classical</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* Distinctive classical */
+font-family: 'Spectral', 'Lora', 'Merriweather', serif;
+                </div>
+            </div>
+        </div>
+
+        <div class="font-section hybrid">
+            <h2>🎨 Hybrid Recommendations</h2>
+            <p style="margin-bottom: 2rem; color: #718096;">Mixed approach combining different font styles for maximum impact</p>
+            
+            <div class="font-option">
+                <h3>Retro-Futuristic Hybrid</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* Title: Retro-futuristic */
+--font-display: 'Orbitron', monospace;
+/* Subtitle: Clean sans */
+--font-subtitle: 'Inter', system-ui, sans-serif;
+/* Body: Readable classical */
+--font-body: 'IBM Plex Serif', Georgia, serif;
+/* Data: Monospace */
+--font-mono: 'Share Tech Mono', 'Courier Prime', monospace;
+                </div>
+                <div class="recommendation">
+                    <h4>🌟 Recommended for RandomFS</h4>
+                    <p>This hybrid approach emphasizes the cutting-edge nature of your IPFS backend while maintaining excellent readability and a distinctive personality.</p>
+                </div>
+            </div>
+
+            <div class="font-option">
+                <h3>Full Neoclassical</h3>
+                <div class="font-preview">
+                    <div class="randomfs-title">RandomFS</div>
+                    <div class="subtitle">Modern Owner Free File System</div>
+                    <div class="body-text">Experience the future of decentralized file storage with our cutting-edge IPFS-powered interface. Navigate through your digital universe with unprecedented freedom and security.</div>
+                </div>
+                <div class="css-code">
+/* Everything serif for intellectual gravitas */
+--font-display: 'Playfair Display', serif;
+--font-body: 'Source Serif Pro', Georgia, serif;
+--font-mono: 'IBM Plex Mono', monospace;
+                </div>
+                <div class="recommendation">
+                    <h4>🏛️ Institutional Elegance</h4>
+                    <p>This approach gives RandomFS an air of institutional reliability and timeless design, making it stand out from typical file system interfaces.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="font-section">
+            <h2>💡 Font Selection Guide</h2>
+            <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+                <h3 style="margin-bottom: 1rem; color: #2d3748;">Choose Your Direction:</h3>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #667eea; margin-bottom: 0.5rem;">🚀 Retro-Futurism</h4>
+                    <p style="color: #4a5568;">Perfect if you want to emphasize the cutting-edge, sci-fi nature of your IPFS backend. Creates a distinctive, futuristic personality that stands out from typical file system interfaces.</p>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #667eea; margin-bottom: 0.5rem;">🏛️ Neoclassical</h4>
+                    <p style="color: #4a5568;">Ideal for conveying institutional reliability and timeless design. Gives RandomFS an air of sophistication and trustworthiness.</p>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #667eea; margin-bottom: 0.5rem;">🎨 Hybrid Approach</h4>
+                    <p style="color: #4a5568;">Best of both worlds - combines distinctive display fonts with highly readable body text. Offers maximum flexibility and visual impact.</p>
+                </div>
+                
+                <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="color: #2d3748; margin-bottom: 0.5rem;">💭 Our Recommendation</h4>
+                    <p style="color: #4a5568;">We suggest starting with the <strong>Retro-Futuristic Hybrid</strong> approach using Orbitron for the title, Inter for subtitles, and IBM Plex Serif for body text. This creates a perfect balance of futuristic appeal and excellent readability.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

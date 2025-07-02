@@ -3,8 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RandomFS - Owner Free File System</title>
+    <title>RandomFS - Modern Owner Free File System</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;700&family=Rajdhani:wght@400;600;700&family=Quantico:wght@400;700&family=Audiowide&family=Michroma&family=Share+Tech+Mono&family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&family=Saira:wght@400;600;700&family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:wght@400;600;700&family=IBM+Plex+Serif:wght@400;500;600&family=Source+Serif+Pro:wght@400;600;700&family=Crimson+Text:wght@400;600;700&family=Spectral:wght@400;500;600&family=Lora:wght@400;500;600&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* Font Options - Uncomment the option you want to use */
+        
+        /* Option 1: All Inter (Clean, modern, excellent readability) */
+        /* :root {
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+        } */
+        
+        /* Option 2: Mixed Stack (Tech brand feel) */
+        
+        /* :root {
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-display: 'Space Grotesk', system-ui, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+        } */
+       
+        
+        /* Option 3: Futuristic/Coding Aesthetic */
+        
+        /* :root {
+            --font-primary: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            --font-display: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            --font-body: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+        } */
+       
+        
+        /* Option 4: Clean Modernism */
+        
+        /* :root {
+            --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-display: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+        } */
+       
+        
+        /* Option 5: Professional IBM Style */
+        
+        /* :root {
+            --font-primary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-display: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+        } */
+       
+        /* ===== RETRO-FUTURISM FONTS ===== */
+        
+        /* Option 6: Classic Retro-Future (Orbitron + Exo 2 + Rajdhani) */
+        /* :root {
+            --font-primary: 'Orbitron', monospace;
+            --font-display: 'Orbitron', monospace;
+            --font-body: 'Rajdhani', sans-serif;
+            --font-mono: 'Share Tech Mono', 'Courier Prime', 'IBM Plex Mono', monospace;
+        } */
+        
+        /* Option 7: Subtle Retro-Tech (Quantico + Audiowide + Michroma) */
+        /* :root {
+            --font-primary: 'Quantico', sans-serif;
+            --font-display: 'Audiowide', cursive;
+            --font-body: 'Michroma', sans-serif;
+            --font-mono: 'Share Tech Mono', 'Courier Prime', 'IBM Plex Mono', monospace;
+        } */
+        
+        /* Option 8: 80s Computer Terminal (Share Tech Mono + Courier Prime + IBM Plex Mono) */
+        /* :root {
+            --font-primary: 'Share Tech Mono', monospace;
+            --font-display: 'Share Tech Mono', monospace;
+            --font-body: 'IBM Plex Mono', monospace;
+            --font-mono: 'Share Tech Mono', 'Courier Prime', 'IBM Plex Mono', monospace;
+        } */
+        
+        /* Option 9: Geometric Future Feel (Saira + Exo 2 + Inter) */
+        :root {
+            --font-primary: 'Saira', sans-serif;
+            --font-display: 'Exo 2', sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+        }
+        
+        /* ===== NEOCLASSICAL FONTS ===== */
+        
+        /* Option 10: Modern Neoclassical (Playfair Display + Cormorant Garamond + Georgia) */
+        /* :root {
+            --font-primary: 'Playfair Display', serif;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Georgia', serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+        } */
+        
+        /* Option 11: Tech Meets Classical (IBM Plex Serif + Source Serif Pro + Crimson Text) */
+        /* :root {
+            --font-primary: 'IBM Plex Serif', serif;
+            --font-display: 'Source Serif Pro', serif;
+            --font-body: 'Crimson Text', serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+        } */
+        
+        /* Option 12: Distinctive Classical (Spectral + Lora + Merriweather) */
+        /* :root {
+            --font-primary: 'Spectral', serif;
+            --font-display: 'Lora', serif;
+            --font-body: 'Merriweather', serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+        } */
+        
+        /* ===== HYBRID RECOMMENDATIONS ===== */
+        
+        /* Option 13: Retro-Futuristic Hybrid (RECOMMENDED) */
+        /* :root {
+            --font-primary: 'Orbitron', monospace;
+            --font-display: 'Orbitron', monospace;
+            --font-body: 'IBM Plex Serif', Georgia, serif;
+            --font-mono: 'Share Tech Mono', 'Courier Prime', monospace;
+        } */
+        
+        /* Option 14: Full Neoclassical */
+        /* :root {
+            --font-primary: 'Playfair Display', serif;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Source Serif Pro', Georgia, serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+        } */
+        
+        /* Option 15: Mixed Retro-Future */
+        /* :root {
+            --font-primary: 'Orbitron', monospace;
+            --font-display: 'Exo 2', sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'Share Tech Mono', 'Courier Prime', monospace;
+        } */
+       
+
+        /* Accent Color Options - Uncomment the option you want to use */
+        
+        /* Option 1: Current Purple Theme */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(15, 23, 42, 0.08);
+            --accent-primary: #1a1a2e;
+            --accent-secondary: #16213e;
+            --accent-tertiary: #0f3460;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 15px rgba(26, 26, 46, 0.08);
+        }
+
+        /*
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: rgba(17, 17, 17, 0.7);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(139, 92, 246, 0.2);
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #a855f7;
+            --accent-tertiary: #c084fc;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 8px 30px rgba(139, 92, 246, 0.25);
+            --glow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+        */
+        
+        /* Option 2: Yellow Accent Theme */
+        /* :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(15, 23, 42, 0.08);
+            --accent-primary: #f59e0b;
+            --accent-secondary: #fbbf24;
+            --accent-tertiary: #fcd34d;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 15px rgba(245, 158, 11, 0.08);
+        } */
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: rgba(17, 17, 17, 0.7);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(245, 158, 11, 0.2);
+            --accent-primary: #f59e0b;
+            --accent-secondary: #fbbf24;
+            --accent-tertiary: #fcd34d;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 8px 30px rgba(245, 158, 11, 0.25);
+            --glow: 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+        
+        /* Option 3: Light Gray Accent Theme */
+        
+        /* :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(15, 23, 42, 0.08);
+            --accent-primary: #6b7280;
+            --accent-secondary: #9ca3af;
+            --accent-tertiary: #d1d5db;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 15px rgba(107, 114, 128, 0.08);
+        } */
+
+        /* [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: rgba(17, 17, 17, 0.7);
+            --text-primary: #f8fafc;
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(156, 163, 175, 0.2);
+            --accent-primary: #9ca3af;
+            --accent-secondary: #d1d5db;
+            --accent-tertiary: #e5e7eb;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 8px 30px rgba(156, 163, 175, 0.25);
+            --glow: 0 0 20px rgba(156, 163, 175, 0.2);
+        } */
+
         * {
             margin: 0;
             padding: 0;
@@ -12,267 +259,763 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: var(--font-body);
+            background: var(--bg-primary);
             min-height: 100vh;
-            padding: 20px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .header-accent {
+            position: relative;
+            width: 100vw;
+            height: 200px;
+            background: transparent;
             overflow: hidden;
         }
 
+        #starfield {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 2.5rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(20px);
+            z-index: 10;
+            box-shadow: var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-primary);
+        }
+
+        .theme-toggle svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--text-primary);
+        }
+
         .header {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 30px;
             text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            padding-top: 1rem;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 50%, var(--accent-tertiary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            letter-spacing: -0.02em;
         }
 
         .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+            font-family: var(--font-body);
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
-        .content {
-            padding: 30px;
+        .header .description {
+            font-family: var(--font-body);
+            color: var(--text-muted);
+            max-width: 48rem;
+            margin: 0 auto;
+            font-size: 1rem;
+            line-height: 1.8;
         }
 
-        .section {
-            margin-bottom: 30px;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
         }
 
-        .section h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+        .stat-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 1.25rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        .stat-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            font-size: 2rem;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.1), rgba(22, 33, 62, 0.1));
+            color: var(--accent-primary);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(26, 26, 46, 0.15);
+            box-shadow: 0 2px 10px rgba(26, 26, 46, 0.08);
+        }
+
+        .stat-content h3 {
+            font-family: var(--font-mono);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .stat-content p {
+            font-family: var(--font-body);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        .card h2 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card h2 svg {
+            width: 2rem;
+            height: 2rem;
+            margin-right: 0.75rem;
+            color: var(--accent-primary);
+            filter: drop-shadow(0 0 3px rgba(26, 26, 46, 0.2));
         }
 
         .upload-area {
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            padding: 40px;
+            border: 2px dashed rgba(26, 26, 46, 0.2);
+            border-radius: 1.25rem;
+            padding: 3rem 2rem;
             text-align: center;
-            transition: border-color 0.3s;
+            transition: all 0.2s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background: rgba(26, 26, 46, 0.03);
+            backdrop-filter: blur(10px);
         }
 
         .upload-area:hover {
-            border-color: #667eea;
-            background-color: #f8f9ff;
+            border-color: var(--accent-primary);
+            background: rgba(26, 26, 46, 0.06);
+            transform: scale(1.01);
+            box-shadow: 0 4px 15px rgba(26, 26, 46, 0.1);
         }
 
         .upload-area.dragover {
-            border-color: #667eea;
-            background-color: #f0f4ff;
+            border-color: var(--accent-primary);
+            background: rgba(26, 26, 46, 0.08);
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(26, 26, 46, 0.15);
         }
 
         .file-input {
             display: none;
         }
 
-        .upload-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
+        .upload-btn, .download-btn {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: #fff;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1em;
+            padding: 1.2rem 2.5rem;
+            border-radius: 0.875rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(26, 26, 46, 0.2);
+            backdrop-filter: blur(10px);
         }
 
-        .upload-btn:hover {
+        .upload-btn:hover:not(:disabled), .download-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 26, 46, 0.3);
         }
 
-        .upload-btn:disabled {
-            opacity: 0.6;
+        .upload-btn:disabled, .download-btn:disabled {
+            background: var(--text-muted);
             cursor: not-allowed;
+            transform: none;
+        }
+
+        .upload-btn svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.75rem;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .download-input {
+            font-family: var(--font-mono);
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.875rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        .download-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.08), var(--glow);
+            background: var(--bg-card);
+        }
+
+        .download-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .files-list {
+            margin-top: 3rem;
+        }
+
+        .file-item {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-item:hover {
+            transform: translateX(3px);
+            border-color: var(--accent-primary);
+            background: var(--bg-card);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        .file-info h3 {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .file-info p {
+            font-family: var(--font-body);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-url {
+            font-family: var(--font-mono);
+            color: var(--accent-primary);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .file-hash {
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .file-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem;
+            background: transparent;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--accent-primary);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-btn:hover {
+            background: rgba(26, 26, 46, 0.08);
+            color: var(--accent-primary);
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(26, 26, 46, 0.15);
+        }
+
+        .action-btn.delete:hover {
+            background: rgba(239, 68, 68, 0.08);
+            color: #ef4444;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+        }
+
+        .action-btn svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .how-it-works {
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            transition: all 0.3s ease;
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 2.5rem 1.5rem 2rem 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        .step-number {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(26, 26, 46, 0.2);
+            position: relative;
+        }
+
+        .step h3 {
+            font-family: var(--font-display);
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .step p {
+            font-family: var(--font-body);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .progress {
+            width: 100%;
+            height: 0.75rem;
+            background: rgba(26, 26, 46, 0.08);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 50%, var(--accent-tertiary) 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+            box-shadow: 0 0 6px rgba(26, 26, 46, 0.2);
         }
 
         .result {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
+            margin-top: 1.5rem;
             display: none;
         }
 
         .result.show {
             display: block;
+            animation: slideIn 0.3s ease-out;
         }
 
-        .rd-url {
-            background: #e7f3ff;
-            border: 1px solid #b3d7ff;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px 0;
-            font-family: monospace;
-            word-break: break-all;
-            cursor: pointer;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .rd-url:hover {
-            background: #d1ecff;
+        .success-message {
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.08);
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+        .error-message {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.08);
         }
 
-        .stat-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
+        .icon {
+            width: 2rem;
+            height: 2rem;
+            fill: currentColor;
         }
 
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 2rem;
+            }
+            
+            .upload-area {
+                padding: 2rem 1rem;
+            }
         }
 
-        .stat-label {
-            color: #666;
-            font-size: 0.9em;
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .progress {
-            width: 100%;
-            height: 10px;
-            background: #f0f0f0;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 10px 0;
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
         }
 
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            width: 0%;
-            transition: width 0.3s;
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 4px;
         }
 
-        .copy-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        .about {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .about h3 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .about p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 10px;
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
         }
     </style>
 </head>
 <body>
+    <div class="header-accent">
+        <canvas id="starfield"></canvas>
+        <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+            <svg class="sun-icon" viewBox="0 0 24 24" style="display: none;">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
+    </div>
     <div class="container">
         <div class="header">
             <h1>RandomFS</h1>
-            <p>Modern Owner Free File System powered by IPFS</p>
+            <p>Modern Owner Free File System with IPFS Backend</p>
+            <p class="description">
+                Files are split into randomized blocks where individual blocks are meaningless noise, 
+                but can be combined to reconstruct the original file. This provides privacy, redundancy, and censorship resistance.
+            </p>
         </div>
 
-        <div class="content">
-            <div class="section">
-                <h2>Upload File</h2>
-                <div class="upload-area" id="uploadArea">
-                    <p>🗂️ Drop files here or click to browse</p>
-                    <input type="file" id="fileInput" class="file-input" multiple>
-                    <br><br>
-                    <button class="upload-btn" id="uploadBtn">Choose Files</button>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon red">📄</div>
+                <div class="stat-content">
+                    <h3 id="filesStored">0</h3>
+                    <p>Files Stored</p>
                 </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon orange">🔗</div>
+                <div class="stat-content">
+                    <h3 id="blocksGenerated">0</h3>
+                    <p>Blocks Generated</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon pink">💾</div>
+                <div class="stat-content">
+                    <h3 id="totalSize">0 B</h3>
+                    <p>Total Size</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <h2>
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                    </svg>
+                    Upload to RandomFS
+                </h2>
+                
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" class="file-input" multiple>
+                    <button class="upload-btn" id="uploadBtn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                        </svg>
+                        Select File
+                    </button>
+                    <p style="color: var(--text-muted); margin-top: 1rem; font-size: 0.95rem;">
+                        File will be split into randomized blocks
+                    </p>
+                </div>
+                
                 <div class="progress" id="progressContainer" style="display: none;">
                     <div class="progress-bar" id="progressBar"></div>
                 </div>
+                
                 <div class="result" id="result"></div>
             </div>
 
-            <div class="section">
-                <h2>System Statistics</h2>
-                <div class="stats" id="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="filesStored">0</div>
-                        <div class="stat-label">Files Stored</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="blocksGenerated">0</div>
-                        <div class="stat-label">Blocks Generated</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalSize">0</div>
-                        <div class="stat-label">Total Size</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="cacheHits">0</div>
-                        <div class="stat-label">Cache Hits</div>
-                    </div>
+            <div class="card">
+                <h2>
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                    </svg>
+                    Download from rfs:// URL
+                </h2>
+                
+                <div>
+                    <input
+                        type="text"
+                        id="downloadUrl"
+                        class="download-input"
+                        placeholder="Paste rfs:// URL here (rfs://abc123def456)"
+                    />
+                    <button class="download-btn" id="downloadBtn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                        </svg>
+                        Download & Reconstruct
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <div class="about">
-                <h3>About RandomFS</h3>
-                <p>RandomFS is a modern implementation of the Owner Free File System (OFF System) concept, built on top of IPFS. It stores files as randomized, multi-use data blocks that appear as digital noise individually but can be combined to reconstruct the original files.</p>
-                <p><strong>Key Features:</strong></p>
-                <ul>
-                    <li>Files are split into randomized blocks stored on IPFS</li>
-                    <li>Each block serves multiple files simultaneously</li>
-                    <li>Access via rfs:// URLs for decentralized retrieval</li>
-                    <li>Three block sizes optimized for different file categories</li>
-                    <li>Local caching for improved performance</li>
-                </ul>
-                <p><strong>rfs:// URL Format:</strong> rfs://host/version/filesize/filename/timestamp/hash</p>
+        <div id="filesList" class="card" style="display: none;">
+            <h2>Your Files</h2>
+            <div id="filesContainer"></div>
+        </div>
+
+        <div class="card how-it-works">
+            <h2>How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number red">1</div>
+                    <h3>File Splitting</h3>
+                    <p>Files are divided into optimized blocks</p>
+                </div>
+                <div class="step">
+                    <div class="step-number orange">2</div>
+                    <h3>Randomization</h3>
+                    <p>Each block is XORed with random data</p>
+                </div>
+                <div class="step">
+                    <div class="step-number pink">3</div>
+                    <h3>IPFS Storage</h3>
+                    <p>Randomized blocks stored on IPFS</p>
+                </div>
+                <div class="step">
+                    <div class="step-number coral">4</div>
+                    <h3>Short URL</h3>
+                    <p>Human-friendly rfs:// URLs</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Theme switching functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.querySelector('.sun-icon');
+        const moonIcon = document.querySelector('.moon-icon');
+        
+        // Check for saved theme preference or default to light
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            } else {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            }
+        }
+
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const uploadBtn = document.getElementById('uploadBtn');
         const result = document.getElementById('result');
         const progressContainer = document.getElementById('progressContainer');
         const progressBar = document.getElementById('progressBar');
+        const downloadUrl = document.getElementById('downloadUrl');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const filesList = document.getElementById('filesList');
+        const filesContainer = document.getElementById('filesContainer');
 
-        // Load stats on page load
+        let files = [];
+        let isUploading = false;
+        let isDownloading = false;
+        let copiedUrl = '';
+
         loadStats();
 
-        // Upload area click handler - prevent double triggering
-        let isUploading = false;
-        
         uploadBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -282,7 +1025,6 @@
         });
 
         uploadArea.addEventListener('click', (e) => {
-            // Only trigger if the click was directly on the upload area, not on the button
             if ((e.target === uploadArea || e.target.classList.contains('upload-area')) && !isUploading) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -290,7 +1032,6 @@
             }
         });
 
-        // Drag and drop handlers
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('dragover');
@@ -307,25 +1048,30 @@
             uploadFiles(files);
         });
 
-        // File input change handler
         fileInput.addEventListener('change', (e) => {
             if (!isUploading) {
                 uploadFiles(e.target.files);
             }
         });
 
-        async function uploadFiles(files) {
-            if (files.length === 0) return;
+        downloadBtn.addEventListener('click', handleDownload);
+
+        async function uploadFiles(fileList) {
+            if (fileList.length === 0) return;
 
             isUploading = true;
             result.innerHTML = '';
             result.classList.remove('show');
             progressContainer.style.display = 'block';
             uploadBtn.disabled = true;
+            uploadBtn.innerHTML = `
+                <div class="spinner" style="width: 1rem; height: 1rem; border: 2px solid transparent; border-top: 2px solid white; border-radius: 50%; margin-right: 0.5rem;"></div>
+                Processing...
+            `;
 
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                progressBar.style.width = ((i / files.length) * 100) + '%';
+            for (let i = 0; i < fileList.length; i++) {
+                const file = fileList[i];
+                progressBar.style.width = ((i / fileList.length) * 100) + '%';
                 
                 try {
                     const formData = new FormData();
@@ -342,22 +1088,29 @@
 
                     const data = await response.json();
                     
+                    const newFile = {
+                        id: Date.now() + i,
+                        name: file.name,
+                        size: file.size,
+                        url: data.url,
+                        uploadTime: new Date().toLocaleString(),
+                        hash: data.hash.substring(0, 8) + '...'
+                    };
+
+                    files.push(newFile);
+                    updateFilesList();
+                    
                     result.innerHTML += `
-                        <div style="margin-bottom: 20px;">
+                        <div class="success-message">
                             <h4>✅ ${file.name} uploaded successfully!</h4>
-                            <p><strong>rfs:// URL:</strong></p>
-                            <div class="rd-url" onclick="copyToClipboard('${data.url}')">
-                                ${data.url}
-                                <button class="copy-btn">Copy</button>
-                            </div>
+                            <p><strong>rfs:// URL:</strong> ${data.url}</p>
                             <p><strong>IPFS Hash:</strong> ${data.hash}</p>
-                            <p><strong>Access URL:</strong> <a href="/rfs/${btoa(data.url)}" target="_blank">/rfs/${btoa(data.url)}</a></p>
                         </div>
                     `;
 
                 } catch (error) {
                     result.innerHTML += `
-                        <div style="margin-bottom: 20px;">
+                        <div class="error-message">
                             <h4>❌ Failed to upload ${file.name}</h4>
                             <p>Error: ${error.message}</p>
                         </div>
@@ -373,11 +1126,110 @@
 
             result.classList.add('show');
             uploadBtn.disabled = false;
+            uploadBtn.innerHTML = `
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                </svg>
+                Select File
+            `;
             fileInput.value = '';
             isUploading = false;
             
-            // Reload stats
             loadStats();
+        }
+
+        async function handleDownload() {
+            const url = downloadUrl.value.trim();
+            if (!url) return;
+
+            isDownloading = true;
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = `
+                <div class="spinner" style="width: 1rem; height: 1rem; border: 2px solid transparent; border-top: 2px solid white; border-radius: 50%; margin-right: 0.5rem;"></div>
+                Reconstructing...
+            `;
+
+            try {
+                const hash = url.replace('rfs://', '');
+                
+                const response = await fetch(`/api/v1/retrieve/${hash}`);
+                if (!response.ok) {
+                    throw new Error('File not found');
+                }
+
+                const blob = await response.blob();
+                const downloadUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = 'downloaded-file';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(downloadUrl);
+                
+                downloadUrl.value = '';
+                alert('File downloaded successfully!');
+            } catch (error) {
+                alert('Download failed: ' + error.message);
+            }
+
+            isDownloading = false;
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = `
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                Download & Reconstruct
+            `;
+        }
+
+        function updateFilesList() {
+            if (files.length === 0) {
+                filesList.style.display = 'none';
+                return;
+            }
+
+            filesList.style.display = 'block';
+            filesContainer.innerHTML = files.map(file => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <h3>${file.name}</h3>
+                        <p>${formatBytes(file.size)} • ${file.uploadTime}</p>
+                        <div class="file-url">${file.url}</div>
+                        <span class="file-hash">(hash: ${file.hash})</span>
+                    </div>
+                    <div class="file-actions">
+                        <button class="action-btn" onclick="copyToClipboard('${file.url}')" title="Copy URL">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                            </svg>
+                        </button>
+                        <button class="action-btn delete" onclick="deleteFile(${file.id})" title="Delete">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <polyline points="3,6 5,6 21,6"/>
+                                <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteFile(id) {
+            files = files.filter(file => file.id !== id);
+            updateFilesList();
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                copiedUrl = text;
+                setTimeout(() => copiedUrl = '', 2000);
+                alert('rfs:// URL copied to clipboard!');
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+            }
         }
 
         async function loadStats() {
@@ -388,7 +1240,6 @@
                 document.getElementById('filesStored').textContent = stats.files_stored || 0;
                 document.getElementById('blocksGenerated').textContent = stats.blocks_generated || 0;
                 document.getElementById('totalSize').textContent = formatBytes(stats.total_size || 0);
-                document.getElementById('cacheHits').textContent = stats.cache_hits || 0;
             } catch (error) {
                 console.error('Failed to load stats:', error);
             }
@@ -402,16 +1253,65 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('rfs:// URL copied to clipboard!');
-            }).catch(err => {
-                console.error('Could not copy text: ', err);
-            });
-        }
-
-        // Auto-refresh stats every 30 seconds
         setInterval(loadStats, 30000);
+
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        const STAR_COLORS = [
+            'rgba(255,255,255,0.8)', // bright white
+            'rgba(200,220,255,0.6)', // soft blue-white
+            'rgba(180,200,255,0.5)', // soft blue
+            'rgba(255,255,255,0.4)'  // dim white
+        ];
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = 200; // Fixed height for header area
+        }
+        function randomStar() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: 0.5 + Math.random() * 1.5,
+                color: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)],
+                twinkle: 0.8 + Math.random() * 0.4,
+                speed: 0.005 + Math.random() * 0.01,
+                phase: Math.random() * Math.PI * 2
+            };
+        }
+        function createStars() {
+            stars = [];
+            const count = Math.floor(canvas.width * canvas.height / 2000); // More stars
+            for (let i = 0; i < count; i++) {
+                stars.push(randomStar());
+            }
+        }
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const s of stars) {
+                const tw = s.twinkle + Math.sin(Date.now() * s.speed + s.phase) * 0.2;
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.radius * tw, 0, Math.PI * 2);
+                ctx.shadowColor = s.color;
+                ctx.shadowBlur = 3;
+                ctx.fillStyle = s.color;
+                ctx.globalAlpha = 0.7 + 0.3 * Math.sin(Date.now() * s.speed + s.phase);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+        function animate() {
+            drawStars();
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', () => {
+            resize();
+            createStars();
+        });
+        resize();
+        createStars();
+        animate();
     </script>
 </body>
 </html> 
