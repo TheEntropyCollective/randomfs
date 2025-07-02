@@ -1,6 +1,6 @@
 # RandomFS - Owner Free File System
 
-A modern implementation of the Owner Free File System (OFFS) concept using IPFS as the backing store. Files are split into randomized blocks that appear as noise, providing deniability while maintaining the ability to reconstruct original files using rd:// URLs.
+A modern implementation of the Owner Free File System (OFFS) concept using IPFS as the backing store. Files are split into randomized blocks that appear as noise, providing deniability while maintaining the ability to reconstruct original files using rfs:// URLs.
 
 ## Project Structure
 
@@ -13,13 +13,13 @@ This repository contains four independent components that can be used separately
 - XOR-based block randomization
 - IPFS HTTP API integration
 - LRU caching system
-- rd:// URL scheme implementation
+- rfs:// URL scheme implementation
 
 ### 💻 [randomfs-cli](randomfs-cli/)
 **Command Line Interface** - Full-featured CLI tool built with Cobra.
 
 - File storage and retrieval
-- rd:// URL parsing and generation
+- rfs:// URL parsing and generation
 - System statistics
 - Verbose output and debugging
 - Shell completion support
@@ -91,8 +91,8 @@ cd randomfs-cli
 go build
 ./randomfs-cli store example.txt
 
-# Download using rd:// URL
-./randomfs-cli download rd://QmX...abc/text/plain/example.txt
+# Download using rfs:// URL
+./randomfs-cli download rfs://QmX...abc/text/plain/example.txt
 ```
 
 ## Features
@@ -108,10 +108,10 @@ go build
 - **Medium files (1MB - 64MB)**: 64KB blocks for balance
 - **Large files (> 64MB)**: 1MB blocks for performance
 
-### 🔗 rd:// URL Scheme
-Files are accessed using the custom rd:// URL format:
+### 🔗 rfs:// URL Scheme
+Files are accessed using the custom rfs:// URL format:
 ```
-rd://<representation-hash>/<content-type>/<original-filename>
+rfs://<representation-hash>/<content-type>/<original-filename>
 ```
 
 ### 🚀 Performance Optimizations
