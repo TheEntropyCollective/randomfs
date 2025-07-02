@@ -300,6 +300,7 @@ case "${1:-}" in
         stop_all
         log_info "Waiting additional time for system to stabilize..."
         sleep 3
+        build_all
         start_all
         ;;
     "build")
@@ -317,7 +318,7 @@ case "${1:-}" in
         echo "Commands:"
         echo "  start   - Build all components and start the development environment"
         echo "  stop    - Stop all RandomFS services and IPFS"
-        echo "  restart - Restart the entire development environment"
+        echo "  restart - Build all components and restart the entire development environment"
         echo "  build   - Build all RandomFS components"
         echo "  status  - Show status of all services"
         echo
