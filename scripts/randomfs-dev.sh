@@ -155,7 +155,7 @@ start_http() {
     
     if [ "$NO_IPFS" = true ]; then
         log_info "Starting HTTP server without IPFS..."
-        ./bin/randomfs-http -port $HTTP_PORT -data "$DATA_DIR/http" > /dev/null 2>&1 &
+        ./bin/randomfs-http -port $HTTP_PORT -data "$DATA_DIR/http" --no-ipfs > /dev/null 2>&1 &
     else
         ./bin/randomfs-http -port $HTTP_PORT -data "$DATA_DIR/http" -ipfs "$IPFS_API" > /dev/null 2>&1 &
     fi
