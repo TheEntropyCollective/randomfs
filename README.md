@@ -92,7 +92,7 @@ go build
 ./randomfs-cli store example.txt
 
 # Download using rfs:// URL
-./randomfs-cli download rfs://QmX...abc/text/plain/example.txt
+./randomfs-cli download rfs://QmX...abc
 ```
 
 ## Features
@@ -111,7 +111,7 @@ go build
 ### 🔗 rfs:// URL Scheme
 Files are accessed using the custom rfs:// URL format:
 ```
-rfs://<representation-hash>/<content-type>/<original-filename>
+rfs://<hash>
 ```
 
 ### 🚀 Performance Optimizations
