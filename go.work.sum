@@ -1,3 +1,4 @@
+github.com/TheEntropyCollective/randomfs-core v0.1.5/go.mod h1:48h8q8ypCQ2ybl3JNhndiPrNzrajfxL41hHrorIIphc=
 golang.org/x/net v0.21.0/go.mod h1:bIjVDfnllIU7BJ2DNgfnXvpSvtn8VRwhlsaeUTyUS44=
 golang.org/x/sync v0.10.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=
 golang.org/x/term v0.32.0/go.mod h1:uZG1FhGx848Sqfsq4/DlJr3xGGsYMu/L5GW4abiaEPQ=
