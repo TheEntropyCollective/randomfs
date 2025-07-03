@@ -10,3 +10,6 @@
 [submodule "randomfs-web"]
 	path = randomfs-web
 	url = https://github.com/TheEntropyCollective/randomfs-web.git
+[submodule "randomfs-fuse"]
+	path = randomfs-fuse
+	url = https://github.com/TheEntropyCollective/randomfs-fuse.git
